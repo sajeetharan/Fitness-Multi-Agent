@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Azure Friday | Azure Cosmos DB Agent Kit</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", -apple-system, sans-serif;
+      color: #f0f4ff;
+      background: #1b1b1f;
+      overflow: hidden;
+    }
+
+    /* Slides */
+    .slide { display: none; width: 100vw; height: 100vh; }
+    .slide.active { display: flex; align-items: center; justify-content: center; }
+
+    /* Slide 1 — Title */
+    .slide-title {
+      background: linear-gradient(135deg, #1a1f36 0%, #0d1117 100%);
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 3rem 4rem;
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .cosmos-logo {
+      width: 64px;
+      height: 64px;
+      display: block;
+    }
+    .logo-row h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 1.4rem;
+      color: #a1b4cf;
+      max-width: 56ch;
+      line-height: 1.5;
+    }
+    .tag {
+      display: inline-block;
+      background: #00bcd41a;
+      border: 1px solid #00bcd455;
+      color: #00e5ff;
+      border-radius: 6px;
+      padding: .35rem .75rem;
+      font-size: .85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .install-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: .9rem 1.4rem;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: 1.1rem;
+      color: #7ee787;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .col {
+      background: #1c2128;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 1.5rem 1.8rem;
+    }
+    .col h3 {
+      font-size: 1.2rem;
+      color: #58a6ff;
+      margin-bottom: .8rem;
+    }
+    .col ul {
+      list-style: none;
+      padding: 0;
+    }
+    .col li {
+      font-size: 1.1rem;
+      color: #c9d1d9;
+      line-height: 1.6;
+      padding: .3rem 0;
+      padding-left: 1.4rem;
+      position: relative;
+    }
+    .col li::before {
+      content: "\2022";
+      color: #f85149;
+      font-size: 1.4rem;
+      position: absolute;
+      left: 0;
+      top: .15rem;
+    }
+
+    /* Slide 2 — How It Works */
+    .slide-how {
+      background: linear-gradient(135deg, #0d1420 0%, #0d1117 100%);
+      flex-direction: column;
+      gap: 1.8rem;
+      padding: 2.5rem 4rem;
+      align-items: flex-start;
+    }
+    .slide-how h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+    .slide-how h2 span { color: #00e5ff; }
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      flex-wrap: wrap;
+    }
+    .step {
+      background: #1c2a3a;
+      border: 1px solid #2d4a6a;
+      border-radius: 10px;
+      padding: .6rem 1rem;
+      text-align: center;
+      min-width: 130px;
+    }
+    .step .step-num {
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #50e6ff;
+      margin-bottom: .25rem;
+    }
+    .step .step-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+    .step-arrow { color: #4a6a8a; font-size: 1.2rem; }
+    .how-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      width: 100%;
+    }
+    .how-code {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-family: "Cascadia Code", "Fira Code", monospace;
+      font-size: .85rem;
+      line-height: 1.7;
+      color: #c9d1d9;
+    }
+    .how-code .comment { color: #6a8a5a; }
+    .how-code .cmd { color: #7ee787; }
+    .how-code .prompt { color: #d2a8ff; }
+    .rule-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .78rem;
+    }
+    .rule-table th {
+      text-align: left;
+      color: #58a6ff;
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: .35rem .5rem;
+      border-bottom: 1px solid #30363d;
+    }
+    .rule-table td {
+      padding: .3rem .5rem;
+      color: #c9d1d9;
+      border-bottom: 1px solid #21262d;
+    }
+    .rule-table .badge {
+      display: inline-block;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-critical { background: #da3633; color: #fff; }
+    .badge-high { background: #9b6a1c; color: #fff; }
+    .badge-med-high { background: #6e4b8b; color: #fff; }
+    .badge-med { background: #2d6a4f; color: #fff; }
+    .badge-low-med { background: #3d5a6e; color: #fff; }
+
+    /* Slide 3 — Resources */
+    .slide-resources {
+      background: linear-gradient(135deg, #1a1f36 0%, #0d1117 100%);
+      flex-direction: column;
+      gap: 2rem;
+      padding: 4rem;
+    }
+    .slide-resources h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+    .resource-list {
+      list-style: none;
+      padding: 0;
+    }
+    .resource-list li {
+      font-size: 1.25rem;
+      color: #c9d1d9;
+      padding: .6rem 0;
+    }
+    .resource-list a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .resource-list a:hover { text-decoration: underline; }
+    .feedback {
+      color: #8b949e;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .feedback a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .feedback a:hover { text-decoration: underline; }
+
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      z-index: 200;
+    }
+    .controls button {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      border-radius: 8px;
+      padding: .5rem 1rem;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+    .controls button:hover { background: #30363d; }
+    .controls span { color: #8b949e; font-size: .85rem; min-width: 40px; text-align: center; }
+
+    @media (max-width: 900px) {
+      .columns { grid-template-columns: 1fr; }
+      .slide-title, .slide-resources { padding: 2rem; }
+      .logo-row h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Title + Pain Points -->
+  <section class="slide slide-title active">
+    <span class="tag">Azure Friday &mdash; AI-First Data Developer Experience</span>
+    <div class="logo-row">
+      <svg class="cosmos-logo" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="planet" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#76b8f4"/>
+            <stop offset="100%" stop-color="#1b5ea4"/>
+          </radialGradient>
+        </defs>
+        <circle cx="9" cy="9" r="5.5" fill="url(#planet)"/>
+        <ellipse cx="9" cy="9" rx="8.2" ry="3.8" fill="none" stroke="#50e6ff" stroke-width="1.1" transform="rotate(-30 9 9)"/>
+      </svg>
+      <h1>Azure Cosmos DB Agent Kit</h1>
+    </div>
+    <p class="subtitle">Shift Cosmos DB expertise into the coding flow so developers and AI assistants avoid expensive mistakes before they ship.</p>
+    <div class="columns">
+      <div class="col">
+        <h3>Customer Pain Points</h3>
+        <ul>
+          <li>High RU costs from inefficient queries and scans</li>
+          <li>Hot partitions from weak partition key choices</li>
+          <li>Rework from the wrong data model or schema drift</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Developer Pain Points</h3>
+        <ul>
+          <li>SELECT * and cross-partition fan-out slip into code</li>
+          <li>Singleton client and retry patterns are easy to miss</li>
+          <li>Modeling, indexing, and query tuning need fast feedback</li>
+        </ul>
+      </div>
+    </div>
+    <div class="install-box">npx skills add AzureCosmosDB/cosmosdb-agent-kit</div>
+    <div class="speaker-notes" hidden>
+      <p><strong>The real developer question is not "does it run?" — it is "did I build the Cosmos DB part right before I scale this thing up?"</strong></p>
+      <p>Your app can work perfectly in dev and still be completely wrong for Azure Cosmos DB at scale. This is the gap that customers worry about.</p>
+      <p>That is what Agent Kit solves. It moves Azure Cosmos DB expertise left — directly into VS Code, directly into the coding flow — so you and your AI assistant make better database decisions before the code ships.</p>
+      <p>This is not a documentation pack. It is 111 rules across 12 categories: data modeling, partition key design, query shape, indexing direction, SDK usage patterns, vector search, full-text search, retry handling, and more.</p>
+      <p>The value to customers is lower RU cost, fewer support tickets, and faster time-to-first-app. The value to developers is fewer "did I build this right?" moments and better feedback before merge.</p>
+      <p>And installing it is one line — npx skills add AzureCosmosDB/cosmosdb-agent-kit. That is it.</p>
+      <p>Think of it this way — once your coding agent knows Azure Cosmos DB rules, it stops being a generic code generator and starts being a good Cosmos DB reviewer.</p>
+      <p>[Turn to Scott] How many of us have had an app running fine and still worried whether the partition key or query shape is going to be the thing that hurts us later?</p>
+    </div>
+  </section>
+
+  <!-- Slide 2: How It Works + Rule Categories -->
+  <section class="slide slide-how">
+    <h2>How It <span>Works</span></h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">Step 1</div><div class="step-label">Install Skill</div></div>
+      <span class="step-arrow">&rarr;</span>
+      <div class="step"><div class="step-num">Step 2</div><div class="step-label">Agent Detects Cosmos DB Task</div></div>
+      <span class="step-arrow">&rarr;</span>
+      <div class="step"><div class="step-num">Step 3</div><div class="step-label">Loads SKILL.md as Index</div></div>
+      <span class="step-arrow">&rarr;</span>
+      <div class="step"><div class="step-num">Step 4</div><div class="step-label">Reads Relevant Rule Files</div></div>
+      <span class="step-arrow">&rarr;</span>
+      <div class="step"><div class="step-num">Step 5</div><div class="step-label">Generates Optimized Code</div></div>
+    </div>
+    <div class="how-bottom">
+      <div class="how-code">
+        <div class="comment"># One command to install</div>
+        <div class="cmd">npx skills add AzureCosmosDB/cosmosdb-agent-kit</div>
+        <br/>
+        <div class="comment"># Then just ask your agent naturally:</div>
+        <div class="prompt">"Help me choose a partition key for my orders collection"</div>
+        <div class="prompt">"Optimize this Cosmos DB query"</div>
+        <div class="prompt">"Review my Cosmos DB data model"</div>
+      </div>
+      <table class="rule-table">
+        <thead><tr><th>#</th><th>Category</th><th>Impact</th><th>Example Rule</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Data Modeling</td><td><span class="badge badge-critical">Critical</span></td><td>Embed related data retrieved together</td></tr>
+          <tr><td>2</td><td>Partition Key Design</td><td><span class="badge badge-critical">Critical</span></td><td>Choose high-cardinality, immutable keys</td></tr>
+          <tr><td>3</td><td>Query Optimization</td><td><span class="badge badge-high">High</span></td><td>Use point reads when id + PK are known</td></tr>
+          <tr><td>4</td><td>SDK Best Practices</td><td><span class="badge badge-high">High</span></td><td>Singleton CosmosClient, async APIs</td></tr>
+          <tr><td>5</td><td>Indexing Strategies</td><td><span class="badge badge-med-high">Med-High</span></td><td>Composite indexes matching ORDER BY</td></tr>
+          <tr><td>6</td><td>Throughput &amp; Scaling</td><td><span class="badge badge-med">Medium</span></td><td>Autoscale for variable workloads</td></tr>
+          <tr><td>7</td><td>Global Distribution</td><td><span class="badge badge-med">Medium</span></td><td>Multi-region writes, failover config</td></tr>
+          <tr><td>8</td><td>Monitoring</td><td><span class="badge badge-low-med">Low-Med</span></td><td>Track RU consumption, P99 latency</td></tr>
+          <tr><td>9</td><td>Design Patterns</td><td><span class="badge badge-high">High</span></td><td>Change Feed materialized views</td></tr>
+          <tr><td>10</td><td>Vector Search</td><td><span class="badge badge-high">High</span></td><td>Embedding policy + distance queries</td></tr>
+          <tr><td>11</td><td>Full-Text Search</td><td><span class="badge badge-high">High</span></td><td>FullTextContains, BM25 ranking</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="speaker-notes" hidden>
+      <p>So here is how it works end to end. Five steps, and the developer only does step one — the rest is automatic.</p>
+      <p>You run one install command. From that point forward, whenever your agent detects you are working on a Cosmos DB task, it loads SKILL.md as an index, picks the relevant rule files for your situation, and generates code that already follows best practices.</p>
+      <p>On the left you can see the install command and some example prompts. You just talk naturally — "help me choose a partition key", "optimize this query", "review my data model" — and the agent brings in the right rules.</p>
+      <p>On the right is the full table of rule categories. The critical ones are data modeling and partition key design — get those wrong and you are paying for it at scale. Then you have high-impact areas like query optimization, SDK best practices, vector search, and full-text search.</p>
+      <p>There are no services to provision, no accounts to create, no configuration files to manage. It is a repo of domain intelligence that makes the agent smarter about Cosmos DB.</p>
+      <p>The key insight: this is not generic NoSQL advice. These rules are specific to how Azure Cosmos DB works — its pricing model, its partition routing, its indexing engine, its SDK behavior. That specificity is what makes the difference between a helpful suggestion and a correct one.</p>
+      <p>[Turn to Scott] And we test these rules. We have a testing framework that runs scenarios against the rules and measures pass/fail rates — so the rules actually get better release over release.</p>
+    </div>
+  </section>
+
+  <!-- Slide 3: Resources -->
+  <section class="slide slide-resources">
+    <h2>Use Right After The Show</h2>
+    <ul class="resource-list">
+      <li>Agent Kit: <a href="https://aka.ms/azurecosmosdb-agent-kit" target="_blank" rel="noreferrer">https://aka.ms/azurecosmosdb-agent-kit</a></li>
+      <li>Demo repo: <a href="https://aka.ms/cosmosdb-agent-kit-demo-repo" target="_blank" rel="noreferrer">https://aka.ms/cosmosdb-agent-kit-demo-repo</a></li>
+    </ul>
+    <p class="feedback">Feedback: <a href="https://github.com/AzureCosmosDB/cosmosdb-agent-kit/discussions" target="_blank" rel="noreferrer">https://github.com/AzureCosmosDB/cosmosdb-agent-kit/discussions</a></p>
+    <div class="speaker-notes" hidden>
+      <p>Let me leave you with this. If you build with Cosmos DB and use coding assistants — install Agent Kit first.</p>
+      <p>It is the fastest way to avoid expensive correctness and performance mistakes before they hit production.</p>
+      <p>Try the skill, run it against a real project, and tell us where it saved you time.</p>
+    </div>
+  </section>
+
+  <!-- Navigation -->
+  <div class="controls">
+    <button id="prev">&#8592;</button>
+    <span id="count">1/2</span>
+    <button id="next">&#8594;</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let current = 0;
+    const total = slides.length;
+    const countEl = document.getElementById('count');
+
+    let notesWin = null;
+
+    function show() {
+      slides.forEach((s, idx) => s.classList.toggle('active', idx === current));
+      countEl.textContent = `${current + 1}/${total}`;
+      updateNotesWindow();
+    }
+
+    function updateNotesWindow() {
+      if (!notesWin || notesWin.closed) return;
+      const noteEl = slides[current].querySelector('.speaker-notes');
+      const html = noteEl ? noteEl.innerHTML : '<p>No notes for this slide.</p>';
+      notesWin.document.getElementById('notes').innerHTML = `<h3>Slide ${current + 1}</h3>${html}`;
+    }
+
+    function openNotes() {
+      if (notesWin && !notesWin.closed) { notesWin.focus(); updateNotesWindow(); return; }
+      notesWin = window.open('', 'speaker-notes', 'width=500,height=400');
+      notesWin.document.write(`<!doctype html><html><head><title>Speaker Notes</title>
+        <style>body{font-family:"Segoe UI",sans-serif;background:#1c1c1c;color:#e6edf3;padding:2rem;line-height:1.7;}
+        h3{color:#58a6ff;margin:0 0 1rem;}p{margin:.5rem 0;font-size:1.1rem;}</style></head>
+        <body><div id="notes"></div></body></html>`);
+      notesWin.document.close();
+      updateNotesWindow();
+    }
+
+    document.getElementById('prev').addEventListener('click', () => { current = Math.max(0, current - 1); show(); });
+    document.getElementById('next').addEventListener('click', () => { current = Math.min(total - 1, current + 1); show(); });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'n' || e.key === 'N') { openNotes(); return; }
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); current = Math.min(total - 1, current + 1); show(); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); current = Math.max(0, current - 1); show(); }
+    });
+    show();
+  </script>
+</body>
+</html>
