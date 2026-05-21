@@ -302,14 +302,14 @@
     </div>
     <div class="install-box">npx skills add AzureCosmosDB/cosmosdb-agent-kit</div>
     <div class="speaker-notes" hidden>
-      <p><strong>The real developer question is not "does it run?" — it is "did I build the Cosmos DB part right before I scale this thing up?"</strong></p>
-      <p>Your app can work perfectly in dev and still be completely wrong for Azure Cosmos DB at scale. This is the gap that customers worry about.</p>
-      <p>That is what Agent Kit solves. It moves Azure Cosmos DB expertise left — directly into VS Code, directly into the coding flow — so you and your AI assistant make better database decisions before the code ships.</p>
-      <p>This is not a documentation pack. It is 111 rules across 12 categories: data modeling, partition key design, query shape, indexing direction, SDK usage patterns, vector search, full-text search, retry handling, and more.</p>
-      <p>The value to customers is lower RU cost, fewer support tickets, and faster time-to-first-app. The value to developers is fewer "did I build this right?" moments and better feedback before merge.</p>
-      <p>And installing it is one line — npx skills add AzureCosmosDB/cosmosdb-agent-kit. That is it.</p>
-      <p>Think of it this way — once your coding agent knows Azure Cosmos DB rules, it stops being a generic code generator and starts being a good Cosmos DB reviewer.</p>
-      <p>[Turn to Scott] How many of us have had an app running fine and still worried whether the partition key or query shape is going to be the thing that hurts us later?</p>
+      <p><strong>Every Cosmos DB application has a moment.</strong></p>
+      <p>It works in development. The tests pass. You deploy. And then three months later, someone opens a cost alert or a latency dashboard and says: "Why is this burning 10x the RUs we expected?"</p>
+      <p>The answer is almost always the same: a partition key that made sense at the time, a query that fans out because nobody caught a missing filter, an index that was never added for a sort that happens on every page load.</p>
+      <p><strong>These are not bugs.</strong> The application runs. The logic is correct. But the Cosmos DB decisions underneath are wrong — and by the time you find out, the data model is in production and changing it means a migration.</p>
+      <p><strong>What if your coding agent already knew this — not generic database tips, but actual Cosmos DB rules?</strong></p>
+      <p>We have packaged years of learnings from multiple Cosmos DB best practices that we advise regularly to customers and also from support cases, design reviews, and production incidents into Agent Kit.</p>
+      <p>Agent Kit is a skill you install into your coding agent that gives it deep Cosmos DB expertise — data modeling, partitioning, query optimization, SDK patterns, indexing, and more. It reviews your actual code against these rules and catches the mistakes that would otherwise ship to production unnoticed.</p>
+      <p><strong>That is Agent Kit.</strong> One hundred and eleven rules, twelve categories, installed with a single command. Your AI assistant goes from "generic code generator" to "Cosmos DB code reviewer that has read every best practice we publish."</p>
     </div>
   </section>
 
@@ -355,13 +355,12 @@
       </table>
     </div>
     <div class="speaker-notes" hidden>
-      <p>So here is how it works end to end. Five steps, and the developer only does step one — the rest is automatic.</p>
+      <p><strong>So here is how it works end to end.</strong> Five steps, and the developer only does step one — the rest is automatic.</p>
       <p>You run one install command. From that point forward, whenever your agent detects you are working on a Cosmos DB task, it loads SKILL.md as an index, picks the relevant rule files for your situation, and generates code that already follows best practices.</p>
-      <p>On the left you can see the install command and some example prompts. You just talk naturally — "help me choose a partition key", "optimize this query", "review my data model" — and the agent brings in the right rules.</p>
-      <p>On the right is the full table of rule categories. The critical ones are data modeling and partition key design — get those wrong and you are paying for it at scale. Then you have high-impact areas like query optimization, SDK best practices, vector search, and full-text search.</p>
-      <p>There are no services to provision, no accounts to create, no configuration files to manage. It is a repo of domain intelligence that makes the agent smarter about Cosmos DB.</p>
-      <p>The key insight: this is not generic NoSQL advice. These rules are specific to how Azure Cosmos DB works — its pricing model, its partition routing, its indexing engine, its SDK behavior. That specificity is what makes the difference between a helpful suggestion and a correct one.</p>
-      <p>[Turn to Scott] And we test these rules. We have a testing framework that runs scenarios against the rules and measures pass/fail rates — so the rules actually get better release over release.</p>
+      <p><strong>On the left</strong> you can see the install command and some example prompts. You just talk naturally — "help me choose a partition key", "optimize this query", "review my data model" — and the agent brings in the right rules.</p>
+      <p><strong>On the right</strong> is the full table of rule categories. The critical ones are data modeling and partition key design — get those wrong and you are paying for it at scale. Then you have high-impact areas like query optimization, SDK best practices, vector search, and full-text search.</p>
+      <p><strong>The key insight:</strong> this is not generic NoSQL advice. These rules are specific to how Azure Cosmos DB works — its pricing model, its partition routing, its indexing engine, its SDK behavior. That specificity is what makes the difference between a helpful suggestion and a correct one.</p>
+      <p><strong>And we test these rules.</strong> We have a testing framework that runs scenarios against the rules and measures pass/fail rates — so the rules actually get better release over release.</p>
     </div>
   </section>
 
@@ -374,9 +373,11 @@
     </ul>
     <p class="feedback">Feedback: <a href="https://github.com/AzureCosmosDB/cosmosdb-agent-kit/discussions" target="_blank" rel="noreferrer">https://github.com/AzureCosmosDB/cosmosdb-agent-kit/discussions</a></p>
     <div class="speaker-notes" hidden>
-      <p>Let me leave you with this. If you build with Cosmos DB and use coding assistants — install Agent Kit first.</p>
-      <p>It is the fastest way to avoid expensive correctness and performance mistakes before they hit production.</p>
-      <p>Try the skill, run it against a real project, and tell us where it saved you time.</p>
+      <p><strong>Let me leave you with this.</strong></p>
+      <p><strong>If you build with Azure Cosmos DB and you use coding assistants — install Agent Kit first.</strong> It is the fastest way to avoid expensive correctness and performance mistakes before they hit production.</p>
+      <p><strong>If you are new to Azure Cosmos DB</strong> — it reduces the cognitive load. You do not need to memorize partition key rules, indexing strategies, or query anti-patterns. The agent knows them.</p>
+      <p><strong>If you already know Azure Cosmos DB</strong> — it helps you scan existing projects for optimization opportunities you might have missed.</p>
+      <p>Try the skill. Run it against a real project. And tell us where it saved you time — or where it still needs better guidance.</p>
     </div>
   </section>
 
