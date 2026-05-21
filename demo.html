@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness Multi-Agent Demo | Azure Cosmos DB</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1a1f36 0%, #0d1117 100%);
+      color: #f0f4ff;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #00bcd4 0%, #2196f3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      color: #a1b4cf;
+      font-size: 1.1rem;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .mode-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .mode-btn.bad {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+
+    .mode-btn.bad.active {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .mode-btn.reference {
+      border-color: #51cf66;
+      color: #51cf66;
+    }
+
+    .mode-btn.reference.active {
+      background: #51cf66;
+      color: white;
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .query-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #a1b4cf;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    select,
+    input {
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(0, 188, 212, 0.3);
+      border-radius: 6px;
+      color: #f0f4ff;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    select:hover,
+    input:hover {
+      border-color: rgba(0, 188, 212, 0.6);
+    }
+
+    select:focus,
+    input:focus {
+      outline: none;
+      border-color: #00bcd4;
+      background: rgba(0, 188, 212, 0.1);
+    }
+
+    select option {
+      background: #1b1b1f;
+      color: #f0f4ff;
+    }
+
+    button.query-btn {
+      padding: 0.75rem 2rem;
+      background: linear-gradient(90deg, #00bcd4 0%, #2196f3 100%);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 150px;
+    }
+
+    button.query-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 188, 212, 0.4);
+    }
+
+    button.query-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #a1b4cf;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f0f4ff;
+    }
+
+    .stat-card.warning .stat-value {
+      color: #ff6b6b;
+    }
+
+    .stat-card.success .stat-value {
+      color: #51cf66;
+    }
+
+    .results-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+
+    .results-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: #f0f4ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: rgba(0, 188, 212, 0.1);
+      padding: 1rem;
+      text-align: left;
+      color: #00bcd4;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.85rem;
+      border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+    }
+
+    tr:hover {
+      background: rgba(0, 188, 212, 0.05);
+    }
+
+    tr.leaked {
+      background: rgba(255, 107, 107, 0.15) !important;
+      border-left: 3px solid #ff6b6b;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge.leaked {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+    }
+
+    .badge.ok {
+      background: rgba(81, 207, 102, 0.2);
+      color: #51cf66;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #a1b4cf;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #a1b4cf;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(0, 188, 212, 0.3);
+      border-top-color: #00bcd4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.75rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid #ff6b6b;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+    }
+
+    .mode-indicator {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 1rem;
+    }
+
+    .mode-indicator.bad {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+    }
+
+    .mode-indicator.reference {
+      background: rgba(81, 207, 102, 0.2);
+      color: #51cf66;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧠 Fitness Multi-Agent Memory Demo</h1>
+      <p>Explore shared agent memory with Azure Cosmos DB — watch for data leakage!</p>
+    </header>
+
+    <div class="mode-toggle">
+      <button class="mode-btn bad active" data-mode="bad">❌ Bad Service (Anti-patterns)</button>
+      <button class="mode-btn reference" data-mode="reference">✅ Reference Service (Best Practices)</button>
+    </div>
+
+    <div class="query-section">
+      <div style="margin-bottom: 1rem;">
+        <strong style="color: #00bcd4; font-size: 1.1rem;">Query Memories</strong>
+        <span class="mode-indicator" id="modeIndicator">Bad Mode</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="memberSelect">Member</label>
+          <select id="memberSelect">
+            <option value="">Select a member...</option>
+            <option value="scott">Scott</option>
+            <option value="ana">Ana</option>
+            <option value="mike">Mike</option>
+            <option value="lisa">Lisa</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="planSelect">Plan</label>
+          <select id="planSelect">
+            <option value="">Select a plan...</option>
+            <option value="summer-cut-2026">summer-cut-2026</option>
+            <option value="winter-bulk-2026">winter-bulk-2026</option>
+            <option value="spring-athlete-2026">spring-athlete-2026</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="memoryTypeSelect">Memory Type</label>
+          <select id="memoryTypeSelect">
+            <option value="">Select memory type...</option>
+            <option value="procedural">Procedural</option>
+            <option value="episodic">Episodic</option>
+            <option value="declarative">Declarative</option>
+          </select>
+        </div>
+
+        <button class="query-btn" id="queryBtn" disabled>Query</button>
+      </div>
+    </div>
+
+    <div class="stats-bar" id="statsBar" style="display: none;">
+      <div class="stat-card">
+        <div class="stat-label">Total Records</div>
+        <div class="stat-value" id="totalRecords">0</div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-label">⚠️ Leaked Records</div>
+        <div class="stat-value" id="leakedRecords">0</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">✓ Valid Records</div>
+        <div class="stat-value" id="validRecords">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">RU Cost</div>
+        <div class="stat-value" id="ruCost">0</div>
+      </div>
+    </div>
+
+    <div id="errorContainer"></div>
+
+    <div class="results-section" id="resultsSection" style="display: none;">
+      <h2>Query Results</h2>
+      <div id="resultsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3100';
+    let currentMode = 'bad';
+    let selectedMember = '';
+
+    // Mode toggle
+    document.querySelectorAll('.mode-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+        updateModeIndicator();
+      });
+    });
+
+    function updateModeIndicator() {
+      const indicator = document.getElementById('modeIndicator');
+      const bad = currentMode === 'bad';
+      indicator.textContent = bad ? '❌ Bad Mode' : '✅ Reference Mode';
+      indicator.className = `mode-indicator ${currentMode}`;
+    }
+
+    // Enable query button when all fields are filled
+    function updateQueryButtonState() {
+      const isValid =
+        document.getElementById('memberSelect').value &&
+        document.getElementById('planSelect').value &&
+        document.getElementById('memoryTypeSelect').value;
+      document.getElementById('queryBtn').disabled = !isValid;
+    }
+
+    document.getElementById('memberSelect').addEventListener('change', (e) => {
+      selectedMember = e.target.value;
+      updateQueryButtonState();
+    });
+
+    document.getElementById('planSelect').addEventListener('change', updateQueryButtonState);
+    document.getElementById('memoryTypeSelect').addEventListener('change', updateQueryButtonState);
+
+    // Query button
+    document.getElementById('queryBtn').addEventListener('click', async () => {
+      const memberId = document.getElementById('memberSelect').value;
+      const planId = document.getElementById('planSelect').value;
+      const memoryType = document.getElementById('memoryTypeSelect').value;
+
+      await executeQuery(memberId, planId, memoryType);
+    });
+
+    async function executeQuery(memberId, planId, memoryType) {
+      const queryBtn = document.getElementById('queryBtn');
+      const errorContainer = document.getElementById('errorContainer');
+      const resultsSection = document.getElementById('resultsSection');
+      const statsBar = document.getElementById('statsBar');
+
+      errorContainer.innerHTML = '';
+      queryBtn.disabled = true;
+
+      try {
+        resultsSection.innerHTML =
+          '<div class="loading"><span class="spinner"></span>Loading...</div>';
+        resultsSection.style.display = 'block';
+
+        const useRef = currentMode === 'reference' ? '1' : '0';
+        const url = `${API_BASE}/api/memory/review?memberId=${encodeURIComponent(
+          memberId
+        )}&planId=${encodeURIComponent(planId)}&memoryType=${encodeURIComponent(
+          memoryType
+        )}&limit=50&USE_REFERENCE_SERVICE=${useRef}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+          resultsSection.innerHTML = '<div class="empty-state"><p>No memories found.</p></div>';
+          statsBar.style.display = 'none';
+          return;
+        }
+
+        // Calculate leaked records
+        const leaked = data.results.filter((record) => record.memberId !== memberId);
+        const valid = data.results.length - leaked.length;
+
+        // Update stats
+        document.getElementById('totalRecords').textContent = data.results.length;
+        document.getElementById('leakedRecords').textContent = leaked.length;
+        document.getElementById('validRecords').textContent = valid;
+        document.getElementById('ruCost').textContent = (data.requestCharge || 0).toFixed(2);
+        statsBar.style.display = 'grid';
+
+        // Render table
+        const html = `
+          <table>
+            <thead>
+              <tr>
+                <th>Member ID</th>
+                <th>Plan ID</th>
+                <th>Memory Type</th>
+                <th>Title</th>
+                <th>Summary</th>
+                <th>Priority</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.results
+                .map((record) => {
+                  const isLeaked = record.memberId !== memberId;
+                  const rowClass = isLeaked ? 'leaked' : '';
+                  const badge = isLeaked
+                    ? '<span class="badge leaked">⚠️ LEAKED</span>'
+                    : '<span class="badge ok">✓ Valid</span>';
+
+                  return `
+                    <tr class="${rowClass}">
+                      <td><strong>${record.memberId}</strong></td>
+                      <td>${record.planId}</td>
+                      <td>${record.memoryType}</td>
+                      <td>${record.title}</td>
+                      <td>${record.summary}</td>
+                      <td>${record.priority}</td>
+                      <td>${badge}</td>
+                    </tr>
+                  `;
+                })
+                .join('')}
+            </tbody>
+          </table>
+        `;
+
+        resultsSection.innerHTML = html;
+
+        // Show warning if leaked records
+        if (leaked.length > 0 && currentMode === 'bad') {
+          const warning = document.createElement('div');
+          warning.className = 'error';
+          warning.innerHTML = `
+            <strong>⚠️ Data Leakage Detected!</strong><br/>
+            The query returned ${leaked.length} record(s) from OTHER members.
+            This is because the bad service doesn't filter on the partition key (<code>memberId</code>).
+            Cosmos DB fanned out across all partitions and returned everything matching the plan and memory type.
+          `;
+          errorContainer.appendChild(warning);
+        }
+      } catch (error) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error';
+        errorDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+        errorContainer.appendChild(errorDiv);
+        resultsSection.style.display = 'none';
+        statsBar.style.display = 'none';
+      } finally {
+        queryBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

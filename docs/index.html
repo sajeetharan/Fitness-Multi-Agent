@@ -413,7 +413,9 @@
       if (notesWin && !notesWin.closed) { notesWin.focus(); updateNotesWindow(); return; }
       notesWin = window.open('', 'speaker-notes', 'width=500,height=400');
       notesWin.document.write(`<!doctype html><html><head><title>Speaker Notes</title>
-        <style>body{font-family:"Segoe UI",sans-serif;background:#1c1c1c;color:#e6edf3;padding:2rem;line-height:1.7;}
+        <style>html,body{height:100%;margin:0;}
+        body{font-family:"Segoe UI",sans-serif;background:#1c1c1c;color:#e6edf3;padding:2rem;line-height:1.7;box-sizing:border-box;overflow:hidden;}
+        #notes{height:100%;overflow-y:auto;padding-right:.5rem;}
         h3{color:#58a6ff;margin:0 0 1rem;}p{margin:.5rem 0;font-size:1.1rem;}</style></head>
         <body><div id="notes"></div></body></html>`);
       notesWin.document.close();
