@@ -1,0 +1,18 @@
+{
+  "name": "azure-friday-fitness-multi-agent-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Azure Friday demo app for Azure Cosmos DB Agent Kit - AI Fitness Multi-Agent with Memory",
+  "scripts": {
+    "seed": "node scripts/seed-emulator.js",
+    "start": "node src/app.js",
+    "start:reference": "cross-env USE_REFERENCE_SERVICE=1 node src/app.js"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.3.0",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

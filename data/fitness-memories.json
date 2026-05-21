@@ -1,0 +1,82 @@
+[
+  {
+    "id": "mem-scott-summer-procedural-001",
+    "memberId": "scott",
+    "planId": "summer-cut-2026",
+    "memoryType": "procedural",
+    "title": "Morning cardio preference",
+    "summary": "Prefers fasted 6 AM runs on weekdays; skip on rainy days and do indoor cycling instead.",
+    "priority": 10,
+    "createdAtUtc": "2026-05-10T16:45:00Z"
+  },
+  {
+    "id": "mem-scott-summer-procedural-002",
+    "memberId": "scott",
+    "planId": "summer-cut-2026",
+    "memoryType": "procedural",
+    "title": "Strength training split",
+    "summary": "Upper/lower split, 3 days/week; avoid training after 7 PM due to sleep impact.",
+    "priority": 9,
+    "createdAtUtc": "2026-05-11T13:10:00Z"
+  },
+  {
+    "id": "mem-scott-summer-declarative-001",
+    "memberId": "scott",
+    "planId": "summer-cut-2026",
+    "memoryType": "declarative",
+    "title": "Dietary preference",
+    "summary": "High protein intake (0.9g per lb); low fat carbs on rest days.",
+    "priority": 8,
+    "createdAtUtc": "2026-05-11T09:20:00Z"
+  },
+  {
+    "id": "mem-scott-summer-episodic-001",
+    "memberId": "scott",
+    "planId": "summer-cut-2026",
+    "memoryType": "episodic",
+    "title": "Week 2 progress note",
+    "summary": "Benching at 225 lbs; slight soreness in right shoulder, monitor closely.",
+    "priority": 7,
+    "createdAtUtc": "2026-05-12T08:00:00Z"
+  },
+  {
+    "id": "mem-ana-summer-procedural-001",
+    "memberId": "ana",
+    "planId": "summer-cut-2026",
+    "memoryType": "procedural",
+    "title": "Yoga and stretching",
+    "summary": "30 min flow every morning; 20 min post-workout static stretching.",
+    "priority": 10,
+    "createdAtUtc": "2026-05-10T18:00:00Z"
+  },
+  {
+    "id": "mem-ana-summer-procedural-002",
+    "memberId": "ana",
+    "planId": "summer-cut-2026",
+    "memoryType": "procedural",
+    "title": "Meal prep schedule",
+    "summary": "Sunday meal prep for 5 days; containers ready by 2 PM.",
+    "priority": 9,
+    "createdAtUtc": "2026-05-12T07:05:00Z"
+  },
+  {
+    "id": "mem-ana-summer-declarative-001",
+    "memberId": "ana",
+    "planId": "summer-cut-2026",
+    "memoryType": "declarative",
+    "title": "Fitness goal",
+    "summary": "Target: 18% body fat by end of summer; current: 22%.",
+    "priority": 8,
+    "createdAtUtc": "2026-05-11T10:15:00Z"
+  },
+  {
+    "id": "mem-ana-summer-episodic-001",
+    "memberId": "ana",
+    "planId": "summer-cut-2026",
+    "memoryType": "episodic",
+    "title": "Week 2 progress note",
+    "summary": "Lost 2 lbs; energy levels stable; feeling confident about progress.",
+    "priority": 7,
+    "createdAtUtc": "2026-05-12T06:30:00Z"
+  }
+]
