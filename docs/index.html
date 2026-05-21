@@ -352,12 +352,12 @@
       </table>
     </div>
     <div class="speaker-notes" hidden>
-      <p><strong>So here is how it works end to end.</strong> Five steps, and the developer only does step one — the rest is automatic.</p>
+      <p>So here is how it works end to end. Five steps, and the developer only does step one — the rest is automatic.</p>
       <p>You run one install command. From that point forward, whenever your agent detects you are working on a Cosmos DB task, it loads SKILL.md as an index, picks the relevant rule files for your situation, and generates code that already follows best practices.</p>
-      <p><strong>On the left</strong> you can see the install command and some example prompts. You just talk naturally — "help me choose a partition key", "optimize this query", "review my data model" — and the agent brings in the right rules.</p>
-      <p><strong>On the right</strong> is the full table of rule categories. The critical ones are data modeling and partition key design — get those wrong and you are paying for it at scale. Then you have high-impact areas like query optimization, SDK best practices, vector search, and full-text search.</p>
-      <p><strong>The key insight:</strong> this is not generic NoSQL advice. These rules are specific to how Azure Cosmos DB works — its pricing model, its partition routing, its indexing engine, its SDK behavior. That specificity is what makes the difference between a helpful suggestion and a correct one.</p>
-      <p><strong>And we test these rules.</strong> We have a testing framework that runs scenarios against the rules and measures pass/fail rates — so the rules actually get better release over release.</p>
+      <p>On the left you can see the install command and some example prompts. You just talk naturally — "help me choose a partition key", "optimize this query", "review my data model" — and the agent brings in the right rules.</p>
+      <p>On the right you can see every rule category we cover. Data modeling and partition key design are marked critical because those are the two decisions that cost the most to get wrong at scale. After that, query optimization, SDK best practices, vector search, and full-text search are all high impact.</p>
+      <p>The key insight: this is not generic NoSQL advice. These rules are specific to how Azure Cosmos DB works — its pricing model, its partition routing, its indexing engine, its SDK behavior. That specificity is what makes the difference between a helpful suggestion and a correct one.</p>
+      <p>And we test these rules. We have a testing framework that runs scenarios against the rules and measures pass/fail rates — so the rules actually get better release over release.</p>
     </div>
   </section>
 
