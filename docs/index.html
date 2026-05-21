@@ -302,14 +302,11 @@
     </div>
     <div class="install-box">npx skills add AzureCosmosDB/cosmosdb-agent-kit</div>
     <div class="speaker-notes" hidden>
-      <p><strong>Every Cosmos DB application has a moment.</strong></p>
-      <p>It works in development. The tests pass. You deploy. And then three months later, someone opens a cost alert or a latency dashboard and says: "Why is this burning 10x the RUs we expected?"</p>
-      <p>The answer is almost always the same: a partition key that made sense at the time, a query that fans out because nobody caught a missing filter, an index that was never added for a sort that happens on every page load.</p>
-      <p><strong>These are not bugs.</strong> The application runs. The logic is correct. But the Cosmos DB decisions underneath are wrong — and by the time you find out, the data model is in production and changing it means a migration.</p>
-      <p><strong>What if your coding agent already knew this — not generic database tips, but actual Cosmos DB rules?</strong></p>
-      <p>We have packaged years of learnings from multiple Cosmos DB best practices that we advise regularly to customers and also from support cases, design reviews, and production incidents into Agent Kit.</p>
-      <p>Agent Kit is a skill you install into your coding agent that gives it deep Cosmos DB expertise — data modeling, partitioning, query optimization, SDK patterns, indexing, and more. It reviews your actual code against these rules and catches the mistakes that would otherwise ship to production unnoticed.</p>
-      <p><strong>That is Agent Kit.</strong> One hundred and eleven rules, twelve categories, installed with a single command. Your AI assistant goes from "generic code generator" to "Cosmos DB code reviewer that has read every best practice we publish."</p>
+      <p><strong>Every Cosmos DB application has a moment.</strong> It works in development. You deploy. And then three months later, someone opens a cost alert and asks — "Why is this burning 10x the RUs we expected?"</p>
+      <p>The cause is always the same — a wrong partition key, a query that fans out because nobody caught a missing filter, an index that was never added. The application runs fine. The logic is correct. But the <strong>Cosmos DB decisions underneath are wrong</strong> — and by the time you find out, changing them means a migration.</p>
+      <p><strong>That is exactly what Agent Kit solves.</strong> We have packaged years of Cosmos DB best practices — from support cases, design reviews, and production incidents — into a skill you install with one command. Your coding agent gets deep Cosmos DB expertise built in.</p>
+      <p>One hundred and eleven rules across twelve categories — data modeling, partitioning, query optimization, SDK patterns, indexing, and more. It reviews your actual code and catches the mistakes before they ship to production.</p>
+      <pre>npx skills add AzureCosmosDB/cosmosdb-agent-kit</pre>
     </div>
   </section>
 
